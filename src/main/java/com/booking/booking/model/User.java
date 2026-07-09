@@ -1,6 +1,12 @@
 package com.booking.booking.model;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.generator.EventType;
+
 import java.time.Instant;
 
 @Getter
@@ -27,13 +33,23 @@ public class User {
     private String lastName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private Role role;
 
     private boolean enabled;
     private boolean emailVerified;
 
+    @Column(nullable = false,
+            updatable = false,
+            insertable = false,
+            columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
+    @Generated(event = EventType.INSERT)
     private Instant createdAt;
-    private Instant updatedAt;
 
+    @Column(nullable = false,
+            insertable = false,
+            columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
+    @Generated(event = EventType.INSERT)
+    private Instant updatedAt;
 
 }
