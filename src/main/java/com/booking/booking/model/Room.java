@@ -18,4 +18,6 @@ public class Room {
     private String description;
     private int capacity;
 
+    @OneToMany(mappedBy = "room")
+    Set<Booking> bookings;
 }

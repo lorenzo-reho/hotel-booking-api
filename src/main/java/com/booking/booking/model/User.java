@@ -1,10 +1,7 @@
 package com.booking.booking.model;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.generator.EventType;
 
 import java.time.Instant;
@@ -52,5 +49,9 @@ public class User {
             columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
     @Generated(event = EventType.INSERT)
     private Instant updatedAt;
+
+    @OneToMany(mappedBy="user", cascade = CascadeType.REMOVE)
+    Set<Booking> bookings;
+
 
 }

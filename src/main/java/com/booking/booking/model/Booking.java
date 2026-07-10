@@ -3,9 +3,7 @@ package com.booking.booking.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Entity
