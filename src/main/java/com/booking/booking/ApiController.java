@@ -3,6 +3,7 @@ package com.booking.booking;
 import com.booking.booking.model.User;
 import com.booking.booking.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,11 @@ public class ApiController {
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
+
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable Long id){
+        return userService.getUserById(id);
+    }
+
 
 }
