@@ -4,10 +4,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.generator.EventType;
 
 import java.time.Instant;
+import java.sql.Date;
 import java.util.Set;
 
 @Getter
@@ -20,10 +23,6 @@ public class User {
         USER,
         ADMIN
     };
-
-    public User(){
-        
-    }
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -45,17 +44,12 @@ public class User {
     private boolean enabled = true;
     private boolean emailVerified = true;
 
-    @Column(nullable = false,
-            updatable = false,
-            insertable = false,
-            columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
-    @Generated(event = EventType.INSERT)
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
     private Instant createdAt;
 
-    @Column(nullable = false,
-            insertable = false,
-            columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
-    @Generated(event = EventType.INSERT)
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.REMOVE)
