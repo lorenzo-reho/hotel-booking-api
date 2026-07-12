@@ -1,6 +1,9 @@
 package com.booking.booking.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Generated;
 import org.hibernate.generator.EventType;
 
@@ -8,6 +11,7 @@ import java.time.Instant;
 import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @Table(name="users")
 public class User {
@@ -16,6 +20,10 @@ public class User {
         USER,
         ADMIN
     };
+
+    public User(){
+        
+    }
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -32,10 +40,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Role role;
+    private Role role = Role.USER;
 
-    private boolean enabled;
-    private boolean emailVerified;
+    private boolean enabled = true;
+    private boolean emailVerified = true;
 
     @Column(nullable = false,
             updatable = false,

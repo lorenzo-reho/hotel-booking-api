@@ -1,7 +1,11 @@
 package com.booking.booking.service;
 
+import com.booking.booking.dto.RegisterRequest;
+
+import com.booking.booking.exception.EmailAlreadyExistsException;
 import com.booking.booking.model.User;
 import com.booking.booking.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +16,11 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers(){
@@ -23,6 +29,22 @@ public class UserService {
 
     public User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User with id=" + id + " Not found"));
+    }
+
+    public User addNewUser(RegisterRequest registerRequest){
+        if(userRepository.existsByEmail(registerRequest.email())){
+            throw new EmailAlreadyExistsException("Email già registrata");
+        }
+
+        User user = new User();
+
+        user.setFirstName(registerRequest.firstName());
+        user.setLastName(registerRequest.lastName());
+        user.setEmail(registerRequest.email());
+
+        user.setPasswordHash(passwordEncoder.encode(registerRequest.password()));
+
+        return userRepository.save(user);
     }
 
 
