@@ -1,6 +1,7 @@
 package com.booking.booking.controller;
 
 import com.booking.booking.dto.RoomDTO;
+import com.booking.booking.dto.UpdateRoomDTO;
 import com.booking.booking.model.Room;
 import com.booking.booking.service.RoomService;
 import jakarta.validation.Valid;
@@ -33,6 +34,12 @@ public class RoomController {
     @PostMapping("/")
     public ResponseEntity<Void> addNewRoom(@Valid @RequestBody RoomDTO roomDTO){
         roomService.addNewRoom(roomDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateRoomById(@PathVariable Long id, @Valid @RequestBody UpdateRoomDTO roomDTO){
+        roomService.updateRoomById(id, roomDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

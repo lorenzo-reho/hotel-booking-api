@@ -1,8 +1,10 @@
 package com.booking.booking.service;
 
 import com.booking.booking.dto.RoomDTO;
+import com.booking.booking.dto.UpdateRoomDTO;
 import com.booking.booking.model.Room;
 import com.booking.booking.repository.RoomRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class RoomService {
         room.setNumber(roomDTO.number());
         room.setCapacity(roomDTO.capacity());
         room.setDescription(roomDTO.description());
+        room.setStatus(roomDTO.roomStatus());
         room.setPricePerNight(roomDTO.pricePerNight());
 
         return roomRepository.save(room);
@@ -39,6 +42,34 @@ public class RoomService {
 
     public Room getRoomById(Long id){
         return roomRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Room with id="+ id +" Not found"));
+    }
+
+    @Transactional
+    public Room updateRoomById(Long id, UpdateRoomDTO updateRoomDTO){
+        Room room = getRoomById(id);
+
+        if(updateRoomDTO.number() != null) {
+            if(!updateRoomDTO.number().equals(room.getNumber())
+                    && roomRepository.existsByNumber(updateRoomDTO.number())){
+                throw new RuntimeException("Room number " + updateRoomDTO.number() + " already registered");
+            }
+            room.setNumber(updateRoomDTO.number());
+        }
+
+
+        if(updateRoomDTO.capacity() != null)
+            room.setCapacity(updateRoomDTO.capacity());
+
+        if(updateRoomDTO.description() != null)
+            room.setDescription(updateRoomDTO.description());
+
+        if(updateRoomDTO.roomStatus() != null)
+            room.setStatus(updateRoomDTO.roomStatus());
+
+        if(updateRoomDTO.pricePerNight() != null)
+            room.setPricePerNight(updateRoomDTO.pricePerNight());
+
+        return roomRepository.save(room);
     }
 
 
