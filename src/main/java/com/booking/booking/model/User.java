@@ -20,7 +20,7 @@ import java.util.Set;
 public class User {
 
     public enum Role{
-        USER,
+        CUSTOMER,
         ADMIN
     };
 
@@ -39,7 +39,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Role role = Role.USER;
+    private Role role = Role.CUSTOMER;
 
     private boolean enabled = true;
     private boolean emailVerified = true;
