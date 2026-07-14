@@ -32,16 +32,20 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Void> addNewRoom(@Valid @RequestBody RoomDTO roomDTO){
-        roomService.addNewRoom(roomDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public Room addNewRoom(@Valid @RequestBody RoomDTO roomDTO){
+        return roomService.addNewRoom(roomDTO);
+        // return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateRoomById(@PathVariable Long id, @Valid @RequestBody UpdateRoomDTO roomDTO){
-        roomService.updateRoomById(id, roomDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public Room updateRoomById(@PathVariable Long id, @Valid @RequestBody UpdateRoomDTO roomDTO){
+        return roomService.updateRoomById(id, roomDTO);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeRoomById(@PathVariable Long id){
+        roomService.deleteRoomById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 }

@@ -40,7 +40,7 @@ public class UserService {
 
     public User addNewUser(RegisterRequest registerRequest){
         if(userRepository.existsByEmail(registerRequest.email())){
-            throw new RuntimeException("Email " + registerRequest.email() + " already registered");
+            throw new EmailAlreadyExistsException("Email " + registerRequest.email() + " already registered");
         }
 
         User user = new User();

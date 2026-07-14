@@ -2,6 +2,7 @@ package com.booking.booking.service;
 
 import com.booking.booking.dto.RoomDTO;
 import com.booking.booking.dto.UpdateRoomDTO;
+import com.booking.booking.exception.RoomNumberAlreadyExistsException;
 import com.booking.booking.model.Room;
 import com.booking.booking.repository.RoomRepository;
 import jakarta.transaction.Transactional;
@@ -20,9 +21,8 @@ public class RoomService {
     }
 
     public Room addNewRoom(RoomDTO roomDTO){
-
         if(roomRepository.existsByNumber(roomDTO.number())){
-            throw new RuntimeException("Room number " + roomDTO.number() + " already registered");
+            throw new RoomNumberAlreadyExistsException("Room number " + roomDTO.number() + " already registered");
         }
 
         Room room = new Room();
@@ -42,6 +42,11 @@ public class RoomService {
 
     public Room getRoomById(Long id){
         return roomRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Room with id="+ id +" Not found"));
+    }
+
+    public void deleteRoomById(Long id){
+        Room room = getRoomById(id);
+        roomRepository.delete(room);
     }
 
     @Transactional
