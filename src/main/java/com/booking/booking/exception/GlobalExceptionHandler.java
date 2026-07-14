@@ -39,10 +39,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleEmailAlreadyExists(
             EmailAlreadyExistsException ex) {
 
-        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
         problem.setTitle(ex.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(problem);
     }
 
@@ -50,10 +50,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleRoomNumberAlreadyExists(
             RoomNumberAlreadyExistsException ex) {
 
-        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
         problem.setTitle(ex.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(problem);
     }
 

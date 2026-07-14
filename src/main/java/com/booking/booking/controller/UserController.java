@@ -34,6 +34,4 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // TODO: PATCH /api/users/{id}
-
 }
