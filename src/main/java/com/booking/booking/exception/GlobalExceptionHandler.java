@@ -35,9 +35,9 @@ public class GlobalExceptionHandler {
                 .body(problem);
     }
 
-    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ProblemDetail> handleEmailAlreadyExists(
-            EmailAlreadyExistsException ex) {
+            RuntimeException ex) {
 
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problem.setTitle(ex.getMessage());
