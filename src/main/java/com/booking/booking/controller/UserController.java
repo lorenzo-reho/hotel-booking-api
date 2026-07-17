@@ -1,7 +1,9 @@
 package com.booking.booking.controller;
 
+import com.booking.booking.dto.UpdateUserDTO;
 import com.booking.booking.model.User;
 import com.booking.booking.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,11 @@ public class UserController {
     public ResponseEntity<Void> removeUserById(@PathVariable Long id){
         userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping("/{id}")
+    public User updateUserById(@PathVariable Long id, @Valid @RequestBody UpdateUserDTO updateUserDTO){
+        return userService.updateUserById(id, updateUserDTO);
     }
 
 }

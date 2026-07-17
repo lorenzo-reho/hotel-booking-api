@@ -2,7 +2,10 @@ package com.booking.booking.service;
 
 import com.booking.booking.dto.RegisterRequest;
 
+import com.booking.booking.dto.UpdateRoomDTO;
+import com.booking.booking.dto.UpdateUserDTO;
 import com.booking.booking.exception.EmailAlreadyExistsException;
+import com.booking.booking.model.Room;
 import com.booking.booking.model.User;
 import com.booking.booking.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -53,5 +56,21 @@ public class UserService {
 
         return userRepository.save(user);
     }
+    @Transactional
+    public User updateUserById(Long id, UpdateUserDTO updateUserDTO){
+        User user = getUserById(id);
+
+        if(updateUserDTO.firstName() != null)
+            user.setFirstName(updateUserDTO.firstName());
+
+        if(updateUserDTO.lastName() != null)
+            user.setLastName(updateUserDTO.lastName());
+
+        if(updateUserDTO.role() != null)
+            user.setRole(updateUserDTO.role());
+
+        return userRepository.save(user);
+    }
+
 
 }
