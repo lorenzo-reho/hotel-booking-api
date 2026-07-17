@@ -1,4 +1,5 @@
 package com.booking.booking.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -53,7 +54,7 @@ public class User {
     private Instant updatedAt;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     Set<Booking> bookings;
-
 
 }

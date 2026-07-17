@@ -1,5 +1,6 @@
 package com.booking.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,5 +39,6 @@ public class Room {
     private RoomStatus status = RoomStatus.OUT_OF_SERVICE;
 
     @OneToMany(mappedBy = "room")
+    @JsonIgnore
     Set<Booking> bookings;
 }
