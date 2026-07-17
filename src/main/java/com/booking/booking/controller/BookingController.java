@@ -1,11 +1,9 @@
 package com.booking.booking.controller;
 
+import com.booking.booking.dto.CreateBookingDTO;
 import com.booking.booking.model.Booking;
 import com.booking.booking.service.BookingService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +24,11 @@ public class BookingController {
     @GetMapping("/{id}")
     public Booking getBookingById(@PathVariable Long id){
         return bookingService.getBookingById(id);
+    }
+
+    @PostMapping({"", "/"})
+    public Booking addNewBooking(@RequestBody CreateBookingDTO createBookingDTO){
+        return bookingService.createNewBooking(createBookingDTO);
     }
 
 }

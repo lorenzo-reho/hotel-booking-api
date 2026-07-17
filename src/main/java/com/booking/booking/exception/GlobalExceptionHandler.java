@@ -57,4 +57,15 @@ public class GlobalExceptionHandler {
                 .body(problem);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ProblemDetail> handleIllegalState(
+            IllegalStateException ex) {
+
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problem.setTitle(ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(problem);
+    }
+
 }
