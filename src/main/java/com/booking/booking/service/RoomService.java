@@ -44,6 +44,10 @@ public class RoomService {
         return roomRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Room with id="+ id +" Not found"));
     }
 
+    public Room findRoomForUpdate(Long id){
+        return roomRepository.findForUpdate(id);
+    }
+
     public void deleteRoomById(Long id){
         Room room = getRoomById(id);
         roomRepository.delete(room);

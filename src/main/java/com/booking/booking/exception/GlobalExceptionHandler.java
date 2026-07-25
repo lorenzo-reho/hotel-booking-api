@@ -68,4 +68,15 @@ public class GlobalExceptionHandler {
                 .body(problem);
     }
 
+    @ExceptionHandler(RoomAlreadyBookedException.class)
+    public ResponseEntity<ProblemDetail> handleRoomAlreadyBooked(
+            RoomAlreadyBookedException ex) {
+
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problem.setTitle(ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(problem);
+    }
+
 }
