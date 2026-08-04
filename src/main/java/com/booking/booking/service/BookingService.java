@@ -1,8 +1,8 @@
 package com.booking.booking.service;
 
 import com.booking.booking.dto.CreateBookingDTO;
+import com.booking.booking.dto.UpdateBookingDTO;
 import com.booking.booking.exception.RoomAlreadyBookedException;
-import com.booking.booking.exception.RoomNumberAlreadyExistsException;
 import com.booking.booking.model.Booking;
 import com.booking.booking.model.Room;
 import com.booking.booking.model.User;
@@ -51,7 +51,8 @@ public class BookingService {
             throw new IllegalStateException("Room is not available");
         }
 
-        if (bookingRepository.existsOverlappingBooking(roomId, startDate, endDate)) {
+        // bookingId = -1L perché non esiste ancora
+        if (bookingRepository.existsOverlappingBooking(-1L, roomId, startDate, endDate)) {
             throw new RoomAlreadyBookedException(
                     "Room is already booked for the selected dates.");
         }
@@ -61,8 +62,34 @@ public class BookingService {
         booking.setRoom(room);
         booking.setUser(user);
 
-        booking.setStartDate(createBookingDTO.startDate());
-        booking.setEndDate(createBookingDTO.endDate());
+        booking.setStartDate(startDate);
+        booking.setEndDate(endDate);
+
+        return bookingRepository.save(booking);
+    }
+
+    public void deleteBookingById(Long id){
+        Booking booking = getBookingById(id);
+        bookingRepository.delete(booking);
+    }
+
+    @Transactional
+    public Booking updateBookingById(Long bookingId, UpdateBookingDTO updateBookingDTO){
+        Booking booking = getBookingById(bookingId);
+        Room room = booking.getRoom();
+
+        Long roomId = room.getId();
+
+        LocalDate startDate = updateBookingDTO.startDate();
+        LocalDate endDate = updateBookingDTO.endDate();
+
+        if (bookingRepository.existsOverlappingBooking(bookingId, roomId, startDate, endDate)) {
+            throw new RoomAlreadyBookedException(
+                    "Room is already booked for the selected dates.");
+        }
+
+        booking.setStartDate(startDate);
+        booking.setEndDate(endDate);
 
         return bookingRepository.save(booking);
     }

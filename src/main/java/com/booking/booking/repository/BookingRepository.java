@@ -14,10 +14,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT COUNT(b) > 0 " +
             "FROM Booking b " +
-            "WHERE b.room.id = :roomId " +
+            "WHERE :roomId = b.room.id " +
             "AND :startDate <= b.endDate " +
-            "AND :endDate >= b.startDate")
-    boolean existsOverlappingBooking(@Param("roomId") Long roomId,
-                                     @Param("startDate") LocalDate startDate,
-                                     @Param("endDate") LocalDate endDate);
+            "AND :endDate >= b.startDate " +
+            "AND :bookingId != b.id" // nel controllo delle sovrapposizioni escludo la prenotazione corrente (con id=bookingId), se esiste.
+    )
+    boolean existsOverlappingBooking(
+            @Param("bookingId") Long bookingId,
+            @Param("roomId") Long roomId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
 }

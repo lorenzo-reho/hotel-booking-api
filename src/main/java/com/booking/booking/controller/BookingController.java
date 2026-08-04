@@ -1,9 +1,12 @@
 package com.booking.booking.controller;
 
 import com.booking.booking.dto.CreateBookingDTO;
+import com.booking.booking.dto.UpdateBookingDTO;
 import com.booking.booking.model.Booking;
 import com.booking.booking.service.BookingService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,17 @@ public class BookingController {
     @PostMapping({"", "/"})
     public Booking addNewBooking(@Valid @RequestBody CreateBookingDTO createBookingDTO){
         return bookingService.createNewBooking(createBookingDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeBookingById(@PathVariable Long id){
+        bookingService.deleteBookingById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping("/{id}")
+    public Booking updateBookingById(@PathVariable Long id, @Valid @RequestBody UpdateBookingDTO updateBookingDTO){
+        return bookingService.updateBookingById(id, updateBookingDTO);
     }
 
 }
