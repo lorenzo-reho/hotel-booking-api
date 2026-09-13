@@ -79,4 +79,12 @@ public class GlobalExceptionHandler {
                 .body(problem);
     }
 
+    @ExceptionHandler(ResourceAccessException.class)
+    public ResponseEntity<ProblemDetail> handleResourceAccess(ResourceAccessException ex) {
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
+        problem.setTitle(ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(problem);
+    }
 }

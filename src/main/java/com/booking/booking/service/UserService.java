@@ -9,12 +9,14 @@ import com.booking.booking.model.Room;
 import com.booking.booking.model.User;
 import com.booking.booking.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -70,6 +72,12 @@ public class UserService {
             user.setRole(updateUserDTO.role());
 
         return userRepository.save(user);
+    }
+
+    public User getUserByPrincipal(UserDetails userDetails){
+        String email = userDetails.getUsername();
+
+        return userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("User with email=" + email + " Not found"));
     }
 
 

@@ -2,17 +2,20 @@ package com.booking.booking.service;
 
 import com.booking.booking.dto.CreateBookingDTO;
 import com.booking.booking.dto.UpdateBookingDTO;
+import com.booking.booking.exception.ResourceAccessException;
 import com.booking.booking.exception.RoomAlreadyBookedException;
 import com.booking.booking.model.Booking;
 import com.booking.booking.model.Room;
 import com.booking.booking.model.User;
 import com.booking.booking.repository.BookingRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -32,8 +35,31 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public Booking getBookingById(Long id){
-        return bookingRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Booking with id=" + id + " Not exists"));
+    public Booking getBookingById(Long id, UserDetails userDetails){
+
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Booking with id=" + id + " Not exists"));
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+
+
+        if(roles.contains("ROLE_ADMIN"))
+            return booking;
+
+        User user = userService.getUserByPrincipal(userDetails);
+        Long userIdFromBooking = booking.getUser().getId();
+
+        if(user.getId().equals(userIdFromBooking))
+            return booking;
+
+        throw new ResourceAccessException("You do not have permission to view this booking");
+    }
+
+    public List<Booking> getMyBookings(UserDetails userDetails){
+        String email = userDetails.getUsername();
+        return bookingRepository.findByUserEmail(email);
     }
 
     @Transactional
@@ -68,14 +94,14 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public void deleteBookingById(Long id){
-        Booking booking = getBookingById(id);
+    public void deleteBookingById(Long id, UserDetails userDetails){
+        Booking booking = getBookingById(id, userDetails);
         bookingRepository.delete(booking);
     }
 
     @Transactional
-    public Booking updateBookingById(Long bookingId, UpdateBookingDTO updateBookingDTO){
-        Booking booking = getBookingById(bookingId);
+    public Booking updateBookingById(Long bookingId, UpdateBookingDTO updateBookingDTO, UserDetails userDetails){
+        Booking booking = getBookingById(bookingId, userDetails);
         Room room = booking.getRoom();
 
         Long roomId = room.getId();

@@ -21,7 +21,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @GetMapping({"/", ""})
+    @GetMapping
     public List<Room> getAllRooms(){
         return roomService.getAllRooms();
     }
@@ -31,7 +31,7 @@ public class RoomController {
         return roomService.getRoomById(id);
     }
 
-    @PostMapping({"/", ""})
+    @PostMapping
     public Room addNewRoom(@Valid @RequestBody RoomDTO roomDTO){
         return roomService.addNewRoom(roomDTO);
         // return ResponseEntity.status(HttpStatus.CREATED).build();

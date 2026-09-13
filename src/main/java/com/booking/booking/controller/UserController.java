@@ -6,6 +6,8 @@ import com.booking.booking.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping({"", "/"})
+    @GetMapping
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
@@ -28,6 +30,11 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id){
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/me")
+    public User getMe(@AuthenticationPrincipal UserDetails userDetails){
+        return userService.getUserByPrincipal(userDetails);
     }
 
     @DeleteMapping("/{id}")
